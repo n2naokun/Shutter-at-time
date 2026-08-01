@@ -1,0 +1,68 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.5.5/schema.json",
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab",
+		"lineEnding": "crlf"
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "double",
+			"semicolons": "always",
+			"indentStyle": "space",
+			"indentWidth": 3
+		},
+		"globals": []
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"preset": "recommended",
+			"complexity": {
+				"noExtraBooleanCast": "off",
+				"useArrowFunction": "off",
+				"noArguments": "off",
+				"useLiteralKeys": "off",
+				"useOptionalChain": {
+					"level": "warn",
+					"fix": "safe"
+				}
+			},
+			"correctness": {
+				"noUnusedVariables": "off",
+				"noInnerDeclarations": "off",
+				"noUnreachable": "off",
+				"noUndeclaredVariables": "warn",
+				"useIsNan": "warn",
+				"noInvalidUseBeforeDeclaration": "off",
+				"noUnusedFunctionParameters": "off"
+			},
+			"style": {
+				"useTemplate": {
+					"level": "warn",
+					"fix": "safe"
+				},
+				"useNodejsImportProtocol": {
+					"level": "warn",
+					"fix": "safe"
+				}
+			},
+			"suspicious": {
+				"noAssignInExpressions": "error",
+				"noRedeclare": "off",
+				"noControlCharactersInRegex": "off",
+				"noEmptyBlockStatements": "off",
+				"noConsole": "off",
+				"noFallthroughSwitchClause": "error",
+				"noIrregularWhitespace": "warn",
+				"noExtraNonNullAssertion": "warn",
+				"noVar": "off",
+				"noRedundantUseStrict": "off",
+				"useIterableCallbackReturn": "off"
+			},
+			"security": {
+				"noGlobalEval": "info"
+			}
+		}
+	}
+}
