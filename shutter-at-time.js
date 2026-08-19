@@ -22,6 +22,10 @@ const osc = require("osc");
 const VRCHAT_HOST = "127.0.0.1";
 const VRCHAT_PORT = 9000;
 
+// VRChat内の時計表示とのずれを補正するため、本撮影のみ指定時刻の50ms後に送信する。
+// 事前撮影とカウントダウンは指定時刻を基準にする。
+const TARGET_CAPTURE_OFFSET_MS = 50;
+
 // ---- 時刻文字列のパース ----
 function parseTargetTime(input) {
    if (!input) {
@@ -152,7 +156,7 @@ function formatTime(date) {
 }
 
 // ---- カウントダウン+撮影のタイムラインを組み立てる ----
-// offsetMs: 撮影時刻(target)からの相対時間(マイナス=手前)
+// offsetMs: 基準時刻(target)からの相対時間(マイナス=手前)
 function buildTimeline(udpPort) {
    return [
       { offsetMs: -60000, action: () => sendCapture(udpPort) },
@@ -167,7 +171,11 @@ function buildTimeline(udpPort) {
       { offsetMs: -3000, action: () => sendChatbox(udpPort, "3") },
       { offsetMs: -2000, action: () => sendChatbox(udpPort, "2") },
       { offsetMs: -1000, action: () => sendChatbox(udpPort, "1") },
-      { offsetMs: 0, action: () => sendCapture(udpPort) },
+      {
+         offsetMs: TARGET_CAPTURE_OFFSET_MS,
+         action: () => sendCapture(udpPort),
+         isTargetCapture: true,
+      },
    ];
 }
 
@@ -203,7 +211,7 @@ async function main() {
       const firedAt = new Date();
       event.action();
 
-      if (event.offsetMs === 0) {
+      if (event.isTargetCapture) {
          console.log(
             `シャッターを送信しました: ${formatTime(firedAt)} ` +
             `(目標との差: +${firedAt.getTime() - target.getTime()} ms)`
